@@ -26,7 +26,7 @@ var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
 
-d3.json("nj-tracts.json", function(error, nj) {
+d3.json("nycmap.json", function(error, nj) {
   if (error) throw error;
 
   var land = topojson.feature(nj, {
