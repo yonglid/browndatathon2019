@@ -69,6 +69,8 @@ def top(idx, n):
     argSorted = np.argsort(user_hotel_score[idx])
     top_n = argSorted[-n:]
 
+    hits = 0
+
     for i in range(len(top_n)):
 
         reverseIterTop_NIndex = len(top_n)-i-1
@@ -79,11 +81,16 @@ def top(idx, n):
         hotel_id = engagement.columns.values.tolist()[cosineSimilarityTop_NIndex]
         hotel_row = hotel.loc[hotel.hotel_id == hotel_id]
 
+
         print(str(i + 1) + ")", hotel_row.hotel_name.item(), "(" + str(cosineSimilarityValue) + ")")
+
+        if len(activity.loc[(activity.user_id == user_id) & (activity.hotel_id == hotel_id)]):
+            hits += 1
         print()
-        #print(activity.loc[activity.hotel_id == hotel_id])
-        #print(activity.loc[activity.user_id == user_id])
+
+    total_engagement = len(activity.loc[activity.user_id == user_id].hotel_id.unique())
+    print('Total engagement:', total_engagement)
+    print('Accuracy:', str((hits / n) * 100) + '%', '(' + str(hits) + '/' + str(total_engagement) + ')')
 
 
-
-top(14, 5)
+top(14, 10)
