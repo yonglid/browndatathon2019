@@ -7,7 +7,6 @@ import time
 import sys
 import pickle
 
-from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.decomposition import NMF
 
 n_items = 5000
@@ -22,6 +21,9 @@ user_ids = activity.user_id.unique()
 hotel_ids = hotel.hotel_id.unique()
 
 
+
+# Make a matrix of users by hotels, with each entry being
+# whether the user has interacted with the hotel (0 or 1)
 engagement = None
 if not os.path.isfile('engagement.pickle'):
     sys.stdout.write("Building Engagement Matrix... [%s]" % (" " * bar_width))
@@ -48,7 +50,7 @@ else:
 
 
 
-hotel_similarities = cosine_similarity(engagement.transpose())
+# Matrix Factorization
 n = 15
 model = NMF(n_components=n, init='random', random_state=0)
 W = model.fit_transform(engagement)
@@ -78,6 +80,7 @@ def top(idx, n):
         hotel_row = hotel.loc[hotel.hotel_id == hotel_id]
 
         print(str(i + 1) + ")", hotel_row.hotel_name.item(), "(" + str(cosineSimilarityValue) + ")")
+        print()
         #print(activity.loc[activity.hotel_id == hotel_id])
         #print(activity.loc[activity.user_id == user_id])
 
