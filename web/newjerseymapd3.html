@@ -31,16 +31,18 @@ d3.json("nycmap.json", function(error, nj) {
 
   var land = topojson.feature(nj, {
     type: "GeometryCollection",
-    geometries: nj.objects.tracts.geometries.filter(function(d) {
+    geometries: nj.objects.collection.geometries.filter(function(d) {
       return (d.id / 10000 | 0) % 100 !== 99;
     })
   });
 
   // EPSG:32111
-  var path = d3.geoPath()
-      .projection(d3.geoTransverseMercator()
-          .rotate([74 + 30 / 60, -38 - 50 / 60])
-          .fitExtent([[20, 20], [940, 1180]], land));
+  var projection = d3.geoMercator()
+            .center([-74.15, 40.56])
+            .scale(50000)
+            .translate([(width) / 2, (height)/2]);
+
+  var path = d3.geoPath().projection(projection);
 
   svg.selectAll("path")
     .data(land.features)
@@ -51,7 +53,7 @@ d3.json("nycmap.json", function(error, nj) {
       .text(function(d) { return d.id; });
 
   svg.append("path")
-      .datum(topojson.mesh(nj, nj.objects.tracts, function(a, b) { return a !== b; }))
+      .datum(topojson.mesh(nj, nj.objects.collection, function(a, b) { return a !== b; }))
       .attr("class", "tract-border")
       .attr("d", path);
 });
