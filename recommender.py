@@ -35,6 +35,9 @@ W = model.fit_transform(engagement)
 H = model.components_
 user_hotel_score = np.matmul(W,H)
 
+# check precision by comparing with the actual hotels they picked/viewed/booked/engaged with?
+# how do we specify what type of engagement?
+#look at the rest of the data to predict one and then compare with actual data 
 def top(idx):
     # help
     #print(np.sort(np.trim_zeros(user_hotel_score[idx])))
