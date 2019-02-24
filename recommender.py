@@ -37,7 +37,18 @@ user_hotel_score = np.matmul(W,H)
 
 def top(idx):
     # help
-    print(np.sort(np.trim_zeros(user_hotel_score[idx])))
+    #print(np.sort(np.trim_zeros(user_hotel_score[idx])))
+    trimmedList = np.trim_zeros(user_hotel_score[idx])
+    print(trimmedList) 
+    print("Max of trimmed list", max(trimmedList))
+    argSorted = np.argsort(trimmedList)
+    top3 = argSorted[-3:]
+    for i in top3: 
+        print(trimmedList[i])
+        #can use index to get names of the hotels too... 
+        
+    
+    
 
 print(top(0))
 
